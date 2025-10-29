@@ -14,7 +14,7 @@ export default function CadastroPaciente() {
     }
 
     return (
-        <div className="flex flex-col gap-10 w-full items-center">
+        <div className="flex flex-col gap-6 sm:gap-8 md:gap-10 lg:gap-10 w-full items-center">
             <input
                 className="w-full bg-[#E3FCFF] p-3 rounded-xl shadow-lg text-black placeholder:text-left"
                 type="text"

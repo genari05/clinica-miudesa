@@ -9,8 +9,8 @@ export default function TelaInicial() {
     const [hover, setHover] = useState(false);
 
     return (
-        <div className="min-h-screen flex items-center justify-evenly bg-[#FDFBD4] dark:bg-black relative">
-            <div className="hidden md:block min-h-screen w-4/5 bg-[url(@/public/logo.png)] bg-cover bg-center bg-no-repeat relative">
+        <div className="min-h-screen flex items-stretch justify-evenly bg-[#FDFBD4] dark:bg-black relative">
+            <div className="hidden md:flex flex-[1.3] min-h-full bg-[url(@/public/logo.png)] bg-cover bg-center bg-no-repeat relative">
                 <div className="absolute top-0 right-0 h-full w-[4px] bg-gradient-to-b from-[#D33865] via-[#38d3a6] to-[#D33865] animate-borderMove" />
             </div>
 
@@ -31,7 +31,7 @@ export default function TelaInicial() {
                 </button>
             )}
 
-            <div className="min-h-screen flex flex-col justify-between items-center p-8 w-full md:w-1/2">
+            <div className="min-h-screen flex flex-col justify-between items-center p-8 w-full md:flex-[0.7]">
                 <div className="flex items-center w-full gap-4 mb-8">
                     <h1
                         className={`flex-1 text-center text-4xl md:text-5xl leading-tight font-bold
@@ -42,7 +42,7 @@ export default function TelaInicial() {
                                     : ""
                             }`}
                     >
-                        CLÍNICA <br /> LABIRINTO DA MENTE
+                        CLÍNICA <br /> LABIRINTO DA <br /> MENTE
                     </h1>
                 </div>
 
