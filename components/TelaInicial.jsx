@@ -10,7 +10,7 @@ export default function TelaInicial() {
 
     return (
         <div className="min-h-screen flex items-center justify-evenly bg-[#FDFBD4] dark:bg-black relative">
-            <div className="hidden md:block min-h-screen w-4/5 bg-[url(@/public/logo.jpg)] bg-cover bg-right bg-no-repeat relative">
+            <div className="hidden md:block min-h-screen w-4/5 bg-[url(@/public/logo.png)] bg-cover bg-center bg-no-repeat relative">
                 <div className="absolute top-0 right-0 h-full w-[4px] bg-gradient-to-b from-[#D33865] via-[#38d3a6] to-[#D33865] animate-borderMove" />
             </div>
 
@@ -56,11 +56,11 @@ export default function TelaInicial() {
                         onMouseLeave={() => setHover(false)}
                         className={`relative flex items-center justify-center transition-all duration-500 rounded-full shadow-xl cursor-pointer overflow-hidden
                             ${hover ? "w-80 h-80" : "w-28 h-28"}
-                            ${hover ? "bg-[#FDFBD4]" : "bg-[#eae9c3]"}
+                            ${hover ? "bg-stone-900 dark:bg-[#FDFBD4]" : "bg-black dark:bg-[#eae9c3]"}
                         `}
                     >
                         {!hover && (
-                            <span className="text-xl font-bold text-black transition-all duration-300">
+                            <span className="text-xl font-bold text-[#FDFBD4] dark:text-black transition-all duration-300">
                                 <MdFingerprint size={100} />
                             </span>
                         )}
