@@ -10,7 +10,7 @@ export default function Psicologo() {
   return (
     <div className="">
       <Header ativo={ativo} setAtivo={setAtivo} />
-      <div className="min-h-screen bg-[#D36183] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#D36183] flex items-center justify-center px-6 md:px-12 py-4">
         {ativo === "calendario" && <CalendarioPsicologo />}
         {ativo === "pacientes" && <PacientesPsicologo />}
       </div>
