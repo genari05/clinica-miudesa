@@ -1,30 +1,35 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "https://api-psicanalise.onrender.com",
+  baseURL: "https://teste-api-psicanalise.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
+// ======================= PSICÓLOGOS =======================
 export const getPsicologos = () => apiClient.get("/psicologos/");
 export const getPsicologoById = (id) => apiClient.get(`/psicologos/${id}`);
 export const createPsicologo = (data) => apiClient.post("/psicologos/", data);
 export const updatePsicologo = (id, data) => apiClient.put(`/psicologos/${id}`, data);
 export const deletePsicologo = (id) => apiClient.delete(`/psicologos/${id}`);
+export const getPacienteByPsicologo = (id) => apiClient.get(`/psicologos/${id}/pacientes`);
 
+// ======================= PACIENTES =======================
 export const getPacientes = () => apiClient.get("/pacientes/");
 export const getPacienteById = (id) => apiClient.get(`/pacientes/${id}`);
 export const createPaciente = (data) => apiClient.post("/pacientes/", data);
 export const updatePaciente = (id, data) => apiClient.put(`/pacientes/${id}`, data);
 export const deletePaciente = (id) => apiClient.delete(`/pacientes/${id}`);
 
+// ======================= SALAS =======================
 export const getSalas = () => apiClient.get("/salas/");
 export const getSalaById = (id) => apiClient.get(`/salas/${id}`);
 export const createSala = (data) => apiClient.post("/salas/", data);
 export const updateSala = (id, data) => apiClient.put(`/salas/${id}`, data);
 export const deleteSala = (id) => apiClient.delete(`/salas/${id}`);
 
+// ======================= DISPONIBILIDADES =======================
 export const getDisponibilidades = () => apiClient.get("/disponibilidades/");
 export const getDisponibilidadeById = (id) => apiClient.get(`/disponibilidades/${id}`);
 export const createDisponibilidade = (data) => apiClient.post("/disponibilidades/", data);
@@ -34,6 +39,7 @@ export const getDisponibilidadeDia = (data) => apiClient.get(`/disponibilidades/
 export const getDisponibilidadeSemana = (inicio, fim) =>
   apiClient.get(`/disponibilidades/semana/${inicio}/${fim}`);
 
+// ======================= TERAPIAS =======================
 export const getTerapias = () => apiClient.get("/terapias/");
 export const getTerapiaById = (id) => apiClient.get(`/terapias/${id}`);
 export const createTerapia = (data) => apiClient.post("/terapias/", data);
@@ -44,30 +50,33 @@ export const getTerapiaDia = (data, psicologoId) =>
 export const getTerapiaSemana = (inicio, fim, psicologoId) =>
   apiClient.get(`/terapias/semana/${inicio}/${fim}/${psicologoId || ""}`);
 
+// ======================= LAUDOS =======================
 export const getLaudos = () => apiClient.get("/laudos/");
 export const getLaudoById = (id) => apiClient.get(`/laudos/${id}`);
 export const createLaudo = (data) => apiClient.post("/laudos/", data);
 export const updateLaudo = (id, data) => apiClient.put(`/laudos/${id}`, data);
 export const deleteLaudo = (id) => apiClient.delete(`/laudos/${id}`);
 
+// ======================= LOGIN =======================
 export const loginPsicologo = async (login, senha) => {
-  const { data: psicologos } = await getPsicologos();
-  const user = psicologos.find(
-    (p) =>
-      (p.email === login || p.crp === login) &&
-      p.senha === senha
-  );
-  if (user) return user;
-  throw new Error("Credenciais inválidas");
+  try {
+    const response = await apiClient.post("/login/psicologo", { login, senha });
+    return response.data.psicologo;
+  } catch (error) {
+    const msg = error.response?.data?.erro || error.response?.data?.mensagem || "Erro ao tentar fazer login.";
+    throw new Error(msg);
+  }
 };
 
 export const loginPaciente = async (email, senha) => {
-  const { data: pacientes } = await getPacientes();
-  const user = pacientes.find(
-    (p) => p.email === email && p.senha === senha
-  );
-  if (user) return user;
-  throw new Error("Credenciais inválidas");
+  try {
+    const response = await apiClient.post("/login/paciente", { email, senha });
+    return response.data.paciente;
+  } catch (error) {
+    const msg =
+      error.response?.data?.erro || "Erro ao tentar fazer login.";
+    throw new Error(msg);
+  }
 };
 
 export default apiClient;

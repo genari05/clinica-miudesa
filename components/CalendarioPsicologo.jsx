@@ -1,26 +1,75 @@
 "use client";
 import { useState, useEffect } from "react";
-
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
+import { getTerapiaDia } from "@/services/api";
 
 export default function CalendarioPsicologo() {
     const diasSemana = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-
     const hoje = new Date();
+
     const [mes, setMes] = useState(hoje.getMonth());
     const [ano, setAno] = useState(hoje.getFullYear());
     const [dadosAPI, setDadosAPI] = useState({});
     const [diaSelecionado, setDiaSelecionado] = useState(null);
+    const [psicologo, setPsicologo] = useState(null);
+    const [carregando, setCarregando] = useState(false);
+    const [erro, setErro] = useState("");
 
     useEffect(() => {
-        // Simulação de dados vindos da API
-        const mock = {
-            5: ["Consulta - João às 10h", "Retorno - Ana às 15h"],
-            12: ["Sessão - Pedro às 14h"],
-            21: ["Nova paciente - Laura às 09h", "Feedback - Carlos às 17h"],
-        };
-        setTimeout(() => setDadosAPI(mock), 500);
+        const dados = localStorage.getItem("psicologo");
+        if (dados) {
+            try {
+                setPsicologo(JSON.parse(dados));
+            } catch (e) {
+                console.error("Erro ao ler dados do psicólogo:", e);
+            }
+        }
     }, []);
+
+    useEffect(() => {
+        async function carregarTerapias() {
+            if (!psicologo?.id) return;
+            setCarregando(true);
+            setErro("");
+
+            try {
+                const inicioMes = new Date(ano, mes, 1);
+                const fimMes = new Date(ano, mes + 1, 0);
+                const dados = {};
+
+                for (let dia = 1; dia <= fimMes.getDate(); dia++) {
+                    const dataStr = new Date(ano, mes, dia)
+                        .toISOString()
+                        .split("T")[0]; // "YYYY-MM-DD"
+                    try {
+                        const resp = await getTerapiaDia(dataStr, psicologo.id);
+                        if (Array.isArray(resp.data) && resp.data.length > 0) {
+                            dados[dia] = resp.data.map(
+                                (sessao) =>
+                                    `${sessao.nome_paciente} às ${new Date(sessao.data).toLocaleTimeString([], {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                    })}`
+                            );
+                        }
+                    } catch (e) {
+                        if (e.response?.status !== 404) {
+                            console.error("Erro ao buscar terapias:", e);
+                        }
+                    }
+                }
+
+                setDadosAPI(dados);
+            } catch (e) {
+                setErro("Erro ao carregar sessões.");
+                console.error(e);
+            } finally {
+                setCarregando(false);
+            }
+        }
+
+        carregarTerapias();
+    }, [mes, ano, psicologo]);
 
     const mudarMes = (incremento) => {
         setMes((m) => {
@@ -56,10 +105,21 @@ export default function CalendarioPsicologo() {
 
     const nomeMes = dataInicio.toLocaleString("pt-BR", { month: "long" });
 
+    if (carregando)
+        return (
+            <p className="text-center mt-10 text-[#D33865] font-semibold">
+                Carregando sessões do calendário...
+            </p>
+        );
+
+    if (erro)
+        return (
+            <p className="text-center mt-10 text-red-600 font-semibold">{erro}</p>
+        );
+
     return (
         <main className="w-full min-h-screen flex flex-col items-center justify-center transition-colors duration-500 relative">
-            <div className="w-full min-h-screen bg-[#D33865] text-[#FDFBD4] dark:text-[#FDFBD4] rounded-2xl shadow-xl border border-[#b12c54]/40 flex flex-col overflow-hidden">
-
+            <div className="w-full min-h-screen bg-[#D33865] text-[#FDFBD4] rounded-2xl shadow-xl border border-[#b12c54]/40 flex flex-col overflow-hidden">
                 <div className="flex items-center justify-between px-6 py-4 border-b border-[#b12c54]/40">
                     <div className="flex items-center gap-3">
                         <button
@@ -110,9 +170,9 @@ export default function CalendarioPsicologo() {
                                 key={idx}
                                 onClick={() => dia && setDiaSelecionado(dia)}
                                 className={`border border-[#b12c54]/40 flex flex-col p-1 md:p-2 transition-all
-                                    ${dia ? "hover:bg-[#FDFBD4]/10 cursor-pointer" : "bg-transparent"}
-                                    ${isHoje ? "bg-[#FDFBD4]/20 ring-2 ring-[#FDFBD4]" : ""}
-                                `}
+                    ${dia ? "hover:bg-[#FDFBD4]/10 cursor-pointer" : "bg-transparent"}
+                    ${isHoje ? "bg-[#FDFBD4]/20 ring-2 ring-[#FDFBD4]" : ""}
+                `}
                             >
                                 <div className="flex justify-end text-xs md:text-sm font-semibold mb-1">
                                     {dia ?? ""}

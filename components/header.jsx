@@ -9,13 +9,29 @@ import Perfil from "./Perfil";
 import Configuracao from "./Configuracao";
 
 export default function Header({ ativo, setAtivo }) {
-    const [idioma, setIdioma] = useState(() => localStorage.getItem("idioma") || "pt");
+    const [psicologo, setPsicologo] = useState(null);
+    const [idioma, setIdioma] = useState("pt");
     const [mostrarPerfil, setMostrarPerfil] = useState(false);
     const [mostrarConfig, setMostrarConfig] = useState(false);
 
     useEffect(() => {
-        localStorage.setItem("idioma", idioma);
-    }, [idioma]);
+        const dados = localStorage.getItem("psicologo");
+        if (dados) {
+            try {
+                // eslint-disable-next-line react-hooks/set-state-in-effect
+                setPsicologo(JSON.parse(dados));
+            } catch (e) {
+                console.error("Erro ao ler dados do psicólogo:", e);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        const idiomaSalvo = localStorage.getItem("idioma");
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (idiomaSalvo) setIdioma(idiomaSalvo);
+    }, []);
+
 
     return (
         <>
@@ -29,13 +45,13 @@ export default function Header({ ativo, setAtivo }) {
                     <Image
                         className="bg-[#fff9d9] dark:bg-[#121212] p-[0.1rem] rounded-full shadow-inner border border-[#d7cfc0]/40"
                         src={Logo}
-                        alt="Foto de perfil do Dr. Tiago"
+                        alt={`Foto de perfil de ${psicologo?.nome || "psicólogo"}`}
                         width={42}
                         height={42}
                     />
                     <span className="font-semibold text-base tracking-wide opacity-0 translate-x-[-10px] transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
                         <span className="text-gray-600 dark:text-gray-400">Dr.</span>{" "}
-                        <span className="text-[#D33865]">Tiago</span>
+                        <span className="text-[#D33865]">{psicologo?.nome || "psicólogo"}</span>
                     </span>
                 </button>
 

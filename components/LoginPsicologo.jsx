@@ -14,7 +14,7 @@ export default function LoginPsicologo() {
       const user = await loginPsicologo(login, senha);
       localStorage.setItem("psicologo", JSON.stringify(user));
       alert(`Bem-vindo(a), Dr(a). ${user.nome}`);
-      window.location.href = "/painel";
+      window.location.href = "/psicologo";
     } catch (err) {
       setErro(err.message);
     } finally {
