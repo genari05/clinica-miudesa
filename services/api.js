@@ -25,14 +25,30 @@ export const deletePaciente = (id) => apiClient.delete(`/pacientes/${id}`);
 // ======================= SALAS =======================
 export const getSalas = () => apiClient.get("/salas/");
 export const getSalaById = (id) => apiClient.get(`/salas/${id}`);
-export const createSala = (data) => apiClient.post("/salas/", data);
+export const createSala = async (nome, descricao) => {
+  try {
+    const response = await apiClient.post("/salas/", { nome, descricao });
+    return response.data.sala;
+  } catch (error) {
+    const msg = error.response?.data?.erro || error.response?.data?.mensagem || "Erro ao tentar adicionar sala.";
+    throw new Error(msg);
+  }
+};
 export const updateSala = (id, data) => apiClient.put(`/salas/${id}`, data);
 export const deleteSala = (id) => apiClient.delete(`/salas/${id}`);
 
 // ======================= DISPONIBILIDADES =======================
 export const getDisponibilidades = () => apiClient.get("/disponibilidades/");
 export const getDisponibilidadeById = (id) => apiClient.get(`/disponibilidades/${id}`);
-export const createDisponibilidade = (data) => apiClient.post("/disponibilidades/", data);
+export const createDisponibilidade = async (id_psicologo, id_sala, data, horario_inicial, horario_final) => {
+  try {
+    const response = await apiClient.post("/disponibilidades/", { id_psicologo, id_sala, data, horario_inicial, horario_final });
+    return response.data.disponibilidade;
+  } catch (error) {
+    const msg = error.response?.data?.erro || error.response?.data?.mensagem || "Erro ao tentar adicionar disponibilidade.";
+    throw new Error(msg);
+  }
+};
 export const updateDisponibilidade = (id, data) => apiClient.put(`/disponibilidades/${id}`, data);
 export const deleteDisponibilidade = (id) => apiClient.delete(`/disponibilidades/${id}`);
 export const getDisponibilidadeDia = (data) => apiClient.get(`/disponibilidades/dia/${data}`);

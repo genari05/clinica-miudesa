@@ -74,12 +74,18 @@ export default function Perfil({ onClose }) {
           </p>
         </div>
 
-        <button
-          onClick={onClose}
-          className="mt-6 w-full py-2 rounded-full bg-[#D33865] text-[#FDFBD4] hover:opacity-90 transition-all cursor-pointer"
-        >
-          Fechar
-        </button>
+        <div className="w-full flex items-center justify-between gap-2">
+          <button className="mt-6 w-1/2 py-2 rounded-full bg-[#D33865] text-[#FDFBD4] hover:opacity-90 transition-all cursor-pointer"
+            onClick={onClose}
+          >
+            Fechar
+          </button>
+          <button className="mt-6 w-1/2 py-2 rounded-full bg-[#D33865] text-[#FDFBD4] hover:opacity-90 transition-all cursor-pointer"
+            onClick={onClose}
+          >
+            Gerenciar
+          </button>
+        </div>
       </div>
     </div>
   );
