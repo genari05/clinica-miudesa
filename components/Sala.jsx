@@ -91,9 +91,9 @@ export default function Sala() {
 
     return (
         <div className="w-full flex flex-col mx-auto py-8 px-4 gap-5">
-            <div className="bg-[#D33865] border-1 rounded-xl shadow-inner">
-                <div className="w-full p-4 border-b-1 mb-4">
-                    <h1 className="text-2xl font-bold text-white">
+            <div className="bg-white dark:bg-black border-2 border-[#D33865] rounded-xl shadow-inner">
+                <div className="w-full p-4 border-b-1 border-[#D33865] mb-4">
+                    <h1 className="text-2xl font-bold text-[#D33865]">
                         {idioma === "pt" ? "Criar uma sala" : "Create a room"}
                     </h1>
                 </div>
@@ -122,7 +122,7 @@ export default function Sala() {
                         <button
                             type="submit"
                             disabled={carregando}
-                            className="flex-1 bg-[#FDFBD4] dark:bg-black text-black dark:text-[#FDFBD4] py-3 rounded-full font-bold hover:opacity-90 disabled:opacity-60 cursor-pointer"
+                            className="flex-1 bg-[#D33865] text-white dark:text-black py-3 rounded-full font-bold hover:opacity-90 disabled:opacity-60 cursor-pointer"
                         >
                             {carregando
                                 ? idioma === "pt" ? "Salvando..." : "Saving..."
@@ -135,7 +135,7 @@ export default function Sala() {
                             <button
                                 type="button"
                                 onClick={resetForm}
-                                className="bg-[#fff9d9] text-[#D33865] py-3 px-4 rounded-full font-semibold border hover:opacity-90 cursor-pointer"
+                                className="bg-white dark:bg-black text-[#D33865] py-3 px-4 rounded-full font-semibold border hover:opacity-90 cursor-pointer"
                             >
                                 {idioma === "pt" ? "Cancelar" : "Cancel"}
                             </button>
@@ -144,9 +144,9 @@ export default function Sala() {
                 </form>
             </div>
 
-            <div className="bg-[#D33865] rounded-xl shadow-inner border-1">
-                <div className="w-full p-4 border-b-1 mb-4">
-                    <h1 className="text-2xl font-bold text-white">
+            <div className="bg-white dark:bg-black border-2 border-[#D33865] rounded-xl shadow-inner border-1">
+                <div className="w-full p-4 border-b-1 border-[#D33865]">
+                    <h1 className="text-2xl font-bold text-[#D33865]">
                         {idioma === "pt" ? "Todas as salas" : "All rooms"}
                     </h1>
                 </div>
@@ -160,7 +160,7 @@ export default function Sala() {
                         {salas.map((sala) => (
                             <li
                                 key={sala.id}
-                                className="flex items-center justify-between gap-4 p-3 bg-[#fff9d9] dark:bg-[#121212] rounded-lg border"
+                                className="flex items-center justify-between gap-4 p-3 bg-[#fff9d9] dark:bg-[#121212] rounded-lg border border-[#D33865]/30"
                             >
                                 <div>
                                     <div className="font-semibold text-[#D33865]">{sala.nome}</div>

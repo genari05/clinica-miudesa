@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
-import { getTerapiaDia } from "@/services/api";
+import { getTerapiaDia, getLaudos, createLaudo } from "@/services/api";
+import LaudoModal from "./LaudoModal";
 
 export default function CalendarioPsicologo() {
     const diasSemana = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -11,6 +12,7 @@ export default function CalendarioPsicologo() {
     const [ano, setAno] = useState(hoje.getFullYear());
     const [dadosAPI, setDadosAPI] = useState({});
     const [diaSelecionado, setDiaSelecionado] = useState(null);
+    const [terapiaSelecionada, setTerapiaSelecionada] = useState(null);
     const [psicologo, setPsicologo] = useState(null);
     const [carregando, setCarregando] = useState(false);
     const [erro, setErro] = useState("");
@@ -38,19 +40,11 @@ export default function CalendarioPsicologo() {
                 const dados = {};
 
                 for (let dia = 1; dia <= fimMes.getDate(); dia++) {
-                    const dataStr = new Date(ano, mes, dia)
-                        .toISOString()
-                        .split("T")[0]; // "YYYY-MM-DD"
+                    const dataStr = new Date(ano, mes, dia).toISOString().split("T")[0];
                     try {
                         const resp = await getTerapiaDia(dataStr, psicologo.id);
                         if (Array.isArray(resp.data) && resp.data.length > 0) {
-                            dados[dia] = resp.data.map(
-                                (sessao) =>
-                                    `${sessao.nome_paciente} às ${new Date(sessao.data).toLocaleTimeString([], {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                    })}`
-                            );
+                            dados[dia] = resp.data;
                         }
                     } catch (e) {
                         if (e.response?.status !== 404) {
@@ -70,6 +64,18 @@ export default function CalendarioPsicologo() {
 
         carregarTerapias();
     }, [mes, ano, psicologo]);
+
+    async function carregarLaudos(id_terapia) {
+        setCarregandoLaudos(true);
+        try {
+            const resp = await getLaudos();
+            setLaudos(resp.data.filter((l) => l.id_terapia === id_terapia));
+        } catch (e) {
+            console.error("Erro ao carregar laudos:", e);
+        } finally {
+            setCarregandoLaudos(false);
+        }
+    }
 
     const mudarMes = (incremento) => {
         setMes((m) => {
@@ -93,6 +99,7 @@ export default function CalendarioPsicologo() {
         setMes(hoje.getMonth());
         setAno(hoje.getFullYear());
         setDiaSelecionado(null);
+        setTerapiaSelecionada(null);
     };
 
     const dataInicio = new Date(ano, mes, 1);
@@ -163,7 +170,7 @@ export default function CalendarioPsicologo() {
                             mes === hoje.getMonth() &&
                             ano === hoje.getFullYear();
 
-                        const eventos = dia ? dadosAPI[dia] || [] : [];
+                        const terapias = dia ? dadosAPI[dia] || [] : [];
 
                         return (
                             <div
@@ -179,12 +186,21 @@ export default function CalendarioPsicologo() {
                                 </div>
 
                                 <div className="flex flex-col gap-1 overflow-y-auto scrollbar-thin scrollbar-thumb-[#FDFBD4]/30 flex-1">
-                                    {eventos.map((evento, i) => (
+                                    {terapias.map((sessao, i) => (
                                         <div
                                             key={i}
-                                            className="text-[0.65rem] md:text-xs bg-[#FDFBD4]/15 rounded px-1 py-0.5 truncate"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setTerapiaSelecionada(sessao);
+                                                carregarLaudos(sessao.id);
+                                            }}
+                                            className="text-[0.65rem] md:text-xs bg-[#FDFBD4]/15 rounded px-1 py-0.5 truncate hover:bg-[#FDFBD4]/25"
                                         >
-                                            {evento}
+                                            {sessao.nome_paciente} às{" "}
+                                            {new Date(sessao.data).toLocaleTimeString([], {
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            })}
                                         </div>
                                     ))}
                                 </div>
@@ -194,7 +210,7 @@ export default function CalendarioPsicologo() {
                 </div>
             </div>
 
-            {diaSelecionado && (
+            {diaSelecionado && !terapiaSelecionada && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                     <div className="bg-[#FDFBD4] text-[#D33865] dark:bg-[#121212] dark:text-[#FDFBD4] p-6 rounded-2xl shadow-xl w-[90%] md:w-[400px]">
                         <h3 className="text-lg font-bold mb-2">
@@ -203,8 +219,14 @@ export default function CalendarioPsicologo() {
 
                         {dadosAPI[diaSelecionado] && dadosAPI[diaSelecionado].length > 0 ? (
                             <ul className="list-disc list-inside space-y-1 text-sm">
-                                {dadosAPI[diaSelecionado].map((item, i) => (
-                                    <li key={i}>{item}</li>
+                                {dadosAPI[diaSelecionado].map((sessao, i) => (
+                                    <li key={i}>
+                                        {sessao.nome_paciente} às{" "}
+                                        {new Date(sessao.data).toLocaleTimeString([], {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}
+                                    </li>
                                 ))}
                             </ul>
                         ) : (
@@ -219,6 +241,13 @@ export default function CalendarioPsicologo() {
                         </button>
                     </div>
                 </div>
+            )}
+
+            {terapiaSelecionada && (
+                <LaudoModal
+                    terapia={terapiaSelecionada}
+                    onClose={() => setTerapiaSelecionada(null)}
+                />
             )}
         </main>
     );

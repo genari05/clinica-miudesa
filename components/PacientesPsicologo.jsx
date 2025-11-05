@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { getPacienteByPsicologo } from "@/services/api";
+import { FaUserCircle } from "react-icons/fa";
 
 export default function PacientesPsicologo() {
     const [psicologo, setPsicologo] = useState(null);
@@ -22,15 +23,8 @@ export default function PacientesPsicologo() {
         setCarregando(true);
         try {
             const response = await getPacienteByPsicologo(psicologo?.id);
-
             const data = response?.data;
-
-            if (
-                !data ||
-                (Array.isArray(data) && data.length === 0) ||
-                (typeof data === "object" &&
-                    Object.values(data).every((v) => v === null))
-            ) {
+            if (!data || (Array.isArray(data) && data.length === 0)) {
                 setPacientes([]);
             } else {
                 setPacientes(Array.isArray(data) ? data : [data]);
@@ -44,34 +38,61 @@ export default function PacientesPsicologo() {
     }
 
     useEffect(() => {
-        if (psicologo?.id) {
-            handlePacientes();
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (psicologo?.id) handlePacientes();
     }, [psicologo]);
 
     if (carregando)
         return (
-            <p className="text-center text-[#D33865] font-medium mt-8 animate-pulse">
-                Carregando pacientes...
-            </p>
+            <div className="flex items-center justify-center min-h-[40vh]">
+                <p className="text-center text-[#D33865] font-medium animate-pulse">
+                    Carregando pacientes...
+                </p>
+            </div>
         );
 
     return (
-        <div className="flex flex-wrap gap-5 p-4 justify-center">
+        <div className="w-full flex flex-col items-center justify-center px-4 py-6">
+
             {pacientes.length > 0 ? (
-                pacientes.map((p) => (
-                    <div
-                        key={p.id}
-                        className="bg-[#D33865] text-white w-[320px] p-4 rounded-lg border-2 border-black shadow-md"
-                    >
-                        <p><strong>Nome:</strong> {p.nome}</p>
-                        <p><strong>Email:</strong> {p.email}</p>
-                        <p><strong>Idade:</strong> {p.idade}</p>
-                        <p><strong>Telefone:</strong> {p.telefone}</p>
-                        <p><strong>Gênero:</strong> {p.genero}</p>
-                    </div>
-                ))
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full max-w-6xl">
+                    {pacientes.map((p) => (
+                        <div
+                            key={p.id}
+                            className="bg-[#FDFBD4] dark:bg-[#121212] border border-[#D33865]/30 rounded-2xl shadow-md hover:shadow-xl transition-all p-5 text-[#D33865] dark:text-[#FDFBD4]"
+                        >
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-12 h-12 rounded-full bg-[#D33865]/20 flex items-center justify-center text-[#D33865] dark:bg-[#f9c9d9]/20">
+                                    <FaUserCircle size={26} />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-semibold">{p.nome}</h3>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">{p.email}</p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-1 text-sm">
+                                <p>
+                                    <span className="font-semibold text-[#b12c54] dark:text-[#f9c9d9]">
+                                        Idade:
+                                    </span>{" "}
+                                    {p.idade} anos
+                                </p>
+                                <p>
+                                    <span className="font-semibold text-[#b12c54] dark:text-[#f9c9d9]">
+                                        Telefone:
+                                    </span>{" "}
+                                    {p.telefone}
+                                </p>
+                                <p>
+                                    <span className="font-semibold text-[#b12c54] dark:text-[#f9c9d9]">
+                                        Gênero:
+                                    </span>{" "}
+                                    {p.genero}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             ) : (
                 <div className="flex flex-col items-center justify-center text-center mt-12 text-gray-700 dark:text-gray-300">
                     <p className="text-lg font-semibold">
