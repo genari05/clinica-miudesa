@@ -89,6 +89,9 @@ export const loginPaciente = async (email, senha) => {
     const response = await apiClient.post("/login/paciente", { email, senha });
     return response.data.paciente; // paciente vem dentro do JSON
   } catch (error) {
+    // 🔍 Mostra tudo o que vier do backend (Render) no console
+    console.log("Erro completo:", error.response?.data || error.message);
+
     const msg =
       error.response?.data?.erro ||
       error.response?.data?.mensagem ||
