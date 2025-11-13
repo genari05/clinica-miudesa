@@ -24,14 +24,24 @@ export default function PacientePage() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Header fixo com o vermelho padrão */}
       <HeaderPaciente ativo={ativo} setAtivo={setAtivo} paciente={paciente} />
 
+      {/* Corpo da página com azul bebê suave */}
       <main
         className="flex-1 flex items-center justify-center px-6 md:px-12 py-6 transition-all duration-500"
-        style={{ backgroundColor: "#D36183" }} // fundo avermelhado suave
+        style={{
+          backgroundColor: "#bfe6f5", // azul bebê
+          backgroundImage: "linear-gradient(to bottom, #bfe6f5, #dff4ff)", // gradiente sutil
+        }}
       >
         <div className="w-full max-w-5xl">
-          {ativo === "inicio" && <HomePaciente paciente={paciente} onAgendar={() => setAtivo("agendar")} />}
+          {ativo === "inicio" && (
+            <HomePaciente
+              paciente={paciente}
+              onAgendar={() => setAtivo("agendar")}
+            />
+          )}
           {ativo === "agendar" && <AgendarConsulta paciente={paciente} />}
           {ativo === "terapia" && <TerapiaPaciente paciente={paciente} />}
           {ativo === "perfil" && <PerfilPaciente paciente={paciente} />}

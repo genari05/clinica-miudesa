@@ -5,7 +5,10 @@ const apiClient = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  // 🚨 Adicione ou aumente o tempo limite para 30 segundos (30000 ms)
+  timeout: 30000, 
 });
+// ...
 
 // ======================= PSICÓLOGOS =======================
 export const getPsicologos = () => apiClient.get("/psicologos/");

@@ -1,36 +1,54 @@
+// src/components/AgendarConsulta.js
 "use client";
 import { useState } from "react";
 import ListaPsicologos from "@/components/ListaPsicologos";
+import DetalheAgendamento from "@/components/DetalheAgendamento";
 
 export default function AgendarConsulta({ paciente }) {
-  const [psicologoSelecionado, setPsicologoSelecionado] = useState(null);
+    // ESTADO: Gerencia qual profissional foi selecionado
+    const [psicologoSelecionado, setPsicologoSelecionado] = useState(null);
 
-  return (
-    <div className="max-w-3xl mx-auto bg-white/5 rounded-2xl p-6 shadow-lg">
-      {!psicologoSelecionado ? (
-        <>
-          <h3 className="text-lg font-semibold mb-4" style={{ color: "#F4EFEA" }}>Escolha um psicólogo</h3>
-          <ListaPsicologos onSelect={(p) => setPsicologoSelecionado(p)} />
-        </>
-      ) : (
-        <>
-          <h3 className="text-lg font-semibold mb-4" style={{ color: "#F4EFEA" }}>{psicologoSelecionado.nome}</h3>
-          <p className="mb-4" style={{ color: "#F4EFEA" }}>Aqui você verá disponibilidade (integração com API).</p>
-          <button
-            onClick={() => alert("Chamar endpoint POST /consultas com os dados")}
-            className="px-5 py-3 rounded-full font-semibold"
-            style={{ backgroundColor: "#38d3a6", color: "#063226" }}
-          >
-            Confirmar agendamento (exemplo)
-          </button>
+    // Definição de cores
+    const COR_FUNDO_SECAO = "bg-white/70"; 
+    const COR_TEXTO = "#002147"; 
 
-          <div className="mt-4">
-            <button onClick={() => setPsicologoSelecionado(null)} className="text-sm underline" style={{ color: "#F4EFEA" }}>
-              Voltar
-            </button>
-          </div>
-        </>
-      )}
-    </div>
-  );
+    // Função para voltar
+    const handleBack = () => {
+        setPsicologoSelecionado(null);
+    };
+
+    return (
+        <div
+            className={`
+                max-w-3xl mx-auto 
+                ${COR_FUNDO_SECAO} rounded-2xl p-8 
+                shadow-xl hover:shadow-2xl 
+                transition-all duration-300 
+                backdrop-blur-sm
+            `}
+            style={{ color: COR_TEXTO }}
+        >
+            {!psicologoSelecionado ? (
+                // === 1. TELA DE LISTAGEM DE PSICÓLOGOS E FILTRO ===
+                <>
+                    <h3 className="text-xl font-bold mb-4">
+                        Escolha um Profissional para Agendar
+                    </h3>
+                    
+                    {/* Lista todos os profissionais */}
+                    <ListaPsicologos 
+                        onSelect={(p) => setPsicologoSelecionado(p)} 
+                    />
+                </>
+            ) : (
+                // === 2. TELA DE DETALHES E AGENDAMENTO (CALENDÁRIO) ===
+                
+                <DetalheAgendamento
+                    psicologo={psicologoSelecionado}
+                    paciente={paciente}
+                    onBack={handleBack}
+                />
+            )}
+        </div>
+    );
 }

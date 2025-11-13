@@ -5,36 +5,43 @@ export default function HomePaciente({ paciente, onAgendar }) {
 
   return (
     <section
-      className="max-w-3xl mx-auto bg-white/10 rounded-2xl p-8 shadow-xl backdrop-blur-sm transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,0,0,0.3)]"
+      className="max-w-3xl mx-auto bg-white/10 rounded-2xl p-8 shadow-xl backdrop-blur-sm transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,0,0,0.25)]"
+      style={{ backgroundColor: "rgba(173, 216, 230, 0.15)" }} // azul-bb translúcido
     >
-      <h2 className="text-2xl font-bold mb-3 text-[#F4EFEA] drop-shadow-md">
-        {paciente?.nome ? `Olá, ${paciente.nome.split(" ")[0]}!` : "Olá!"}
+      <h2 className="text-3xl font-bold mb-4 text-[#063970] drop-shadow-md">
+        {paciente?.nome
+          ? `Olá, ${paciente.nome.split(" ")[0]}!`
+          : "Olá, seja bem-vindo(a)!"}
       </h2>
 
       {primeiraSessao ? (
         <>
-          <p className="mb-6 text-base text-[#F4EFEA]/90 leading-relaxed">
-            Seja bem-vindo(a) à <strong>Clínica Mente Viva</strong>. Aqui você
-            encontra profissionais qualificados e pode agendar suas sessões
-            com facilidade.
+          <p className="mb-10 text-base text-[#063970]/90 leading-relaxed">
+            É um prazer ter você conosco na{" "}
+            <strong>Clínica Mente Viva</strong>. Aqui, você encontrará
+            profissionais dedicados ao seu bem-estar emocional.  
+            Comece agora sua jornada para uma mente mais leve 🌿
           </p>
 
           <div className="flex flex-wrap gap-3">
             <button
               onClick={() => onAgendar && onAgendar()}
-              className="px-5 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 hover:scale-105"
-              style={{ backgroundColor: "#38d3a6", color: "#063226" }}
+              className="px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 hover:scale-105"
+              style={{
+                backgroundColor: "#9ee7d8", // tom azul-esverdeado suave
+                color: "#063226",
+              }}
             >
               Agendar primeira sessão
             </button>
 
             <button
-              onClick={() => alert('Saber mais sobre a clínica')}
-              className="px-5 py-3 rounded-full font-semibold shadow-lg border transition-all duration-300 hover:scale-105"
+              onClick={() => alert("Saber mais sobre a clínica")}
+              className="px-6 py-3 rounded-full font-semibold shadow-lg border transition-all duration-300 hover:scale-105"
               style={{
-                backgroundColor: "transparent",
-                color: "#F4EFEA",
-                borderColor: "rgba(244,239,234,0.2)",
+                backgroundColor: "#9ee7d8",
+                color: "#063226",
+                borderColor: "rgba(234,248,242,0.3)",
               }}
             >
               Sobre a Clínica
@@ -43,27 +50,30 @@ export default function HomePaciente({ paciente, onAgendar }) {
         </>
       ) : (
         <>
-          <p className="mb-4 text-base text-[#F4EFEA]/90 leading-relaxed">
+          <p className="mb-4 text-base text-[#EAF8F2]/90 leading-relaxed">
             Sua próxima sessão está marcada para:{" "}
             <strong>{paciente.proximaConsulta || "—"}</strong>
           </p>
 
           <div className="flex flex-wrap gap-3">
             <button
-              onClick={() => alert('Ir para minhas consultas')}
-              className="px-5 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 hover:scale-105"
-              style={{ backgroundColor: "#38d3a6", color: "#063226" }}
+              onClick={() => alert("Ir para minhas consultas")}
+              className="px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 hover:scale-105"
+              style={{
+                backgroundColor: "#9ee7d8",
+                color: "#063226",
+              }}
             >
               Ver minhas consultas
             </button>
 
             <button
-              onClick={() => alert('Reagendar / cancelar')}
-              className="px-5 py-3 rounded-full font-semibold shadow-lg border transition-all duration-300 hover:scale-105"
+              onClick={() => alert("Reagendar / cancelar")}
+              className="px-6 py-3 rounded-full font-semibold shadow-lg border transition-all duration-300 hover:scale-105"
               style={{
                 backgroundColor: "transparent",
-                color: "#F4EFEA",
-                borderColor: "rgba(244,239,234,0.2)",
+                color: "#063970",
+                borderColor: "rgba(234,248,242,0.3)",
               }}
             >
               Reagendar
