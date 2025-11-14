@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "https://api-psicanalise.onrender.com/",
+  baseURL: "https://clinica-psicologia-lovat.vercel.app/",
   headers: {
     "Content-Type": "application/json",
   },
