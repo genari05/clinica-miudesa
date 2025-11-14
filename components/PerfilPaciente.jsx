@@ -1,18 +1,27 @@
+// src/components/PerfilPaciente.js
 "use client";
-import { useState } from 'react'; // Importamos useState para gerenciar o hover
+import { useState } from 'react'; 
+// A função updatePaciente não é mais necessária
 
 export default function PerfilPaciente({ paciente }) {
     // Cor de texto principal (Azul/Cinza Escuro)
     const NOVA_COR = "#2F4156"; 
     
-    // Cores unificadas para os botões
+    // Cores unificadas para o botão 'Sair'
     const COR_BOTAO_FUNDO = "#38d3a6";
-    const COR_BOTAO_HOVER = "#2fb28e"; // Cor mais escura para o hover
+    const COR_BOTAO_HOVER = "#2fb28e"; 
     const COR_BOTAO_TEXTO = "#063226"; 
 
-    // Estados para gerenciar o hover dos botões (Necessário para aplicar a cor do hover via 'style')
-    const [hoverEditar, setHoverEditar] = useState(false);
+    // Estados para gerenciar o hover (apenas para o botão Sair)
     const [hoverSair, setHoverSair] = useState(false);
+    
+    // Função de saída (Logout)
+    const handleSair = () => {
+        // Remove a informação do paciente logado do armazenamento local
+        localStorage.removeItem("paciente");
+        // Redireciona o usuário para a página inicial
+        window.location.href = "/"; 
+    };
 
     return (
         <section 
@@ -22,7 +31,6 @@ export default function PerfilPaciente({ paciente }) {
                 shadow-xl transition-all duration-300 
                 backdrop-blur-sm
                 text-center 
-                /* 🚨 HOVER DO RETÂNGULO: Sombra mais forte e leve escala */
                 hover:shadow-2xl hover:scale-[1.01] 
             "
         >
@@ -37,50 +45,29 @@ export default function PerfilPaciente({ paciente }) {
                 className="space-y-2 text-sm text-left mx-auto" 
                 style={{ color: NOVA_COR, maxWidth: '250px' }}
             >
-                <p><strong>Nome:</strong> {paciente?.nome || "—"}</p>
-                <p><strong>Email:</strong> {paciente?.email || "—"}</p>
-                <p><strong>Telefone:</strong> {paciente?.telefone || "—"}</p>
-                <p><strong>Data de nascimento:</strong> {paciente?.data_nascimento || "—"}</p>
+                <p><span>Nome:</span> {paciente?.nome || "—"}</p>
+                <p><span>Email:</span> {paciente?.email || "—"}</p>
+                <p><span>Telefone:</span> {paciente?.telefone || "—"}</p>
+                <p><span>Data de nascimento:</span> {paciente?.data_nascimento || "—"}</p>
             </div>
 
             <div className="mt-6 flex gap-3 justify-center">
-                {/* BLOCO DE BOTÃO: EDITAR - CORRIGIDO */}
-                <button
-                    onClick={() => alert("Editar perfil (a implementar)")}
-                    // 🚨 EVENTOS DE HOVER PARA GERENCIAR A MUDANÇA DE COR
-                    onMouseEnter={() => setHoverEditar(true)}
-                    onMouseLeave={() => setHoverEditar(false)}
-                    className="
-                        px-3 py-1.5 rounded-full font-medium 
-                        transition-all duration-200 hover:scale-105
-                    "
-                    style={{ 
-                        // A cor muda baseada no estado 'hoverEditar'
-                        backgroundColor: hoverEditar ? COR_BOTAO_HOVER : COR_BOTAO_FUNDO, 
-                        color: COR_BOTAO_TEXTO 
-                    }}
-                >
-                    Editar
-                </button>
                 
-                {/* BLOCO DE BOTÃO: SAIR - CORRIGIDO */}
+                {/* 🚨 BOTÃO EDITAR FOI REMOVIDO */}
+
+                {/* BLOCO DE BOTÃO: SAIR */}
                 <button
-                    onClick={() => {
-                        localStorage.removeItem("paciente");
-                        window.location.href = "/"; 
-                    }}
-                    // 🚨 EVENTOS DE HOVER PARA GERENCIAR A MUDANÇA DE COR
+                    onClick={handleSair} 
                     onMouseEnter={() => setHoverSair(true)}
                     onMouseLeave={() => setHoverSair(false)}
                     className="
-                        px-3 py-1.5 rounded-full font-medium border-none
+                        px-4 py-2 rounded-full font-medium border-none
                         transition-all duration-200 hover:scale-105
                     "
-                    // Usando as mesmas cores do botão "Editar"
                     style={{ 
-                        // A cor muda baseada no estado 'hoverSair'
                         backgroundColor: hoverSair ? COR_BOTAO_HOVER : COR_BOTAO_FUNDO, 
-                        color: COR_BOTAO_TEXTO 
+                        color: COR_BOTAO_TEXTO,
+                        minWidth: '100px' // Garante um tamanho decente para o botão
                     }}
                 >
                     Sair

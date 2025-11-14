@@ -5,10 +5,15 @@ export default function HomePaciente({ paciente, onAgendar }) {
 
   return (
     <section
-      className="max-w-3xl mx-auto bg-white/10 rounded-2xl p-8 shadow-xl backdrop-blur-sm transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,0,0,0.25)]"
-      style={{ backgroundColor: "rgba(173, 216, 230, 0.15)" }} // azul-bb translúcido
+      className="max-w-3xl mx-auto rounded-2xl p-8 shadow-xl backdrop-blur-sm transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,0,0,0.25)]"
+      style={{
+        backgroundColor: "#001f3f", // 🔵 NAVY
+      }}
     >
-      <h2 className="text-3xl font-bold mb-4 text-[#063970] drop-shadow-md">
+      <h2
+        className="text-3xl font-bold mb-6 drop-shadow-md text-center"
+        style={{ color: "#F5F5DC" }} // BEIGE
+      >
         {paciente?.nome
           ? `Olá, ${paciente.nome.split(" ")[0]}!`
           : "Olá, seja bem-vindo(a)!"}
@@ -16,52 +21,66 @@ export default function HomePaciente({ paciente, onAgendar }) {
 
       {primeiraSessao ? (
         <>
-          <p className="mb-10 text-base text-[#063970]/90 leading-relaxed">
+          <p
+            className="mb-10 text-base leading-relaxed text-center"
+            style={{ color: "#F5F5DC" }} // BEIGE
+          >
             É um prazer ter você conosco na{" "}
-            <strong>Clínica Mente Viva</strong>. Aqui, você encontrará
-            profissionais dedicados ao seu bem-estar emocional.  
+            <strong style={{ color: "#F5F5DC" }}>Clínica Mente Viva</strong>.  
+            Aqui, você encontrará profissionais dedicados ao seu bem-estar emocional.  
             Comece agora sua jornada para uma mente mais leve 🌿
           </p>
 
-          <div className="flex flex-wrap gap-3">
+          {/* 🔵 BOTÃO CENTRALIZADO + ESTILO DO HEADER */}
+          <div className="flex justify-center">
             <button
               onClick={() => onAgendar && onAgendar()}
-              className="px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 hover:scale-105"
+              className="px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300"
               style={{
-                backgroundColor: "#9ee7d8", // tom azul-esverdeado suave
-                color: "#063226",
+                backgroundColor: "#FFFFFF",
+                color: "#567C8D",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#567C8D"; // teal
+                e.currentTarget.style.color = "#F5F5DC"; // beige
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#FFFFFF";
+                e.currentTarget.style.color = "#567C8D";
               }}
             >
               Agendar primeira sessão
-            </button>
-
-            <button
-              onClick={() => alert("Saber mais sobre a clínica")}
-              className="px-6 py-3 rounded-full font-semibold shadow-lg border transition-all duration-300 hover:scale-105"
-              style={{
-                backgroundColor: "#9ee7d8",
-                color: "#063226",
-                borderColor: "rgba(234,248,242,0.3)",
-              }}
-            >
-              Sobre a Clínica
             </button>
           </div>
         </>
       ) : (
         <>
-          <p className="mb-4 text-base text-[#EAF8F2]/90 leading-relaxed">
+          <p
+            className="mb-6 text-base leading-relaxed text-center"
+            style={{ color: "#F5F5DC" }}
+          >
             Sua próxima sessão está marcada para:{" "}
-            <strong>{paciente.proximaConsulta || "—"}</strong>
+            <strong style={{ color: "#F5F5DC" }}>
+              {paciente.proximaConsulta || "—"}
+            </strong>
           </p>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex justify-center gap-3">
+            {/* Botão estilo header */}
             <button
               onClick={() => alert("Ir para minhas consultas")}
-              className="px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 hover:scale-105"
+              className="px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300"
               style={{
-                backgroundColor: "#9ee7d8",
-                color: "#063226",
+                backgroundColor: "#FFFFFF",
+                color: "#567C8D",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#567C8D";
+                e.currentTarget.style.color = "#F5F5DC";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#FFFFFF";
+                e.currentTarget.style.color = "#567C8D";
               }}
             >
               Ver minhas consultas
@@ -69,11 +88,11 @@ export default function HomePaciente({ paciente, onAgendar }) {
 
             <button
               onClick={() => alert("Reagendar / cancelar")}
-              className="px-6 py-3 rounded-full font-semibold shadow-lg border transition-all duration-300 hover:scale-105"
+              className="px-6 py-3 rounded-full font-semibold shadow-lg border transition-all duration-300"
               style={{
                 backgroundColor: "transparent",
-                color: "#063970",
-                borderColor: "rgba(234,248,242,0.3)",
+                color: "#F5F5DC",
+                borderColor: "rgba(255,255,255,0.4)",
               }}
             >
               Reagendar

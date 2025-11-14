@@ -50,21 +50,36 @@ export default function DetalheAgendamento({ psicologo, paciente, onBack }) {
 
 
     // Função de Agendamento
+    // Dentro da função handleAgendar() em DetalheAgendamento.js
+
     const handleAgendar = async () => {
         if (!selectedSlot || !paciente || !psicologo) return;
 
         setIsScheduling(true);
         setError(null);
 
-        // 🚨 CORREÇÃO DO ERRO 400: Adição do id_disponibilidade
+        // 🚨 CORREÇÃO FINAL BASEADA NA DOCUMENTAÇÃO:
+        const dataEHoraCombinada = `${selectedSlot.data} ${selectedSlot.horario_inicial}`;
+        
         const terapiaData = {
-            id_paciente: paciente.id, 
+            // Campos obrigatórios conforme documentação
             id_psicologo: psicologo.id,
-            // ID que o backend usa para saber qual horário específico deve ser reservado
-            id_disponibilidade: selectedSlot.id, 
-            data: selectedSlot.data,
-            horario_inicial: selectedSlot.horario_inicial,
-            id_sala: selectedSlot.id_sala || null, // Garante que a sala é enviada ou é null
+            id_paciente: paciente.id,
+            
+            // 1. Campo 'data' COMBINADO com data e horário (Ex: "2025-10-10 10:30")
+            data: dataEHoraCombinada, 
+            
+            // 2. Campo 'duracao' (Definindo um valor padrão, se a API não o fornecer)
+            duracao: selectedSlot.duracao || "01:00", 
+            
+            // 3. Campo 'numero_sessao' (Definindo um valor padrão, ou 1 para a primeira)
+            numero_sessao: 1, 
+
+            // 4. Campo 'id_sala'
+            id_sala: selectedSlot.id_sala || null, 
+            
+            // ⚠️ O ID DA DISPONIBILIDADE NÃO É ENVIADO NO CORPO, mas o BACKEND DEVE SABER USÁ-LO
+            // (Se o backend precisar do ID do slot para marcar como reservado, ele terá que ser adaptado)
         };
 
         try {
@@ -72,9 +87,10 @@ export default function DetalheAgendamento({ psicologo, paciente, onBack }) {
             alert(`Sessão agendada com sucesso com ${psicologo.nome}!`);
             onBack(); 
         } catch (err) {
-            console.error("Erro ao agendar:", err);
-            // Mensagem de erro mais útil para o usuário
-            setError(err.message || "Falha ao confirmar agendamento. Tente outro horário ou verifique se o horário já foi reservado.");
+            console.error("Erro completo 400:", err.response?.data || err);
+            // Mensagem de erro que pode vir do backend
+            const msg = err.response?.data?.mensagem || err.message || "Falha no agendamento. Verifique os dados.";
+            setError(msg);
         } finally {
             setIsScheduling(false);
         }
