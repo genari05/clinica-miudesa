@@ -9,16 +9,11 @@ export default function TelaInicial() {
     const [hover, setHover] = useState(false);
 
     return (
-        <div className="min-h-screen flex flex-col md:flex-row items-stretch justify-evenly bg-[#FDFBD4] dark:bg-black relative">
+        <div className="min-h-screen flex items-stretch justify-evenly bg-[#FDFBD4] dark:bg-black relative">
 
-            {/* 🔥 IMAGEM — AGORA APARECE NO CELULAR TAMBÉM */}
-            <div className="
-                flex w-full h-40 md:h-auto md:flex-[1.3]
-                bg-[url('/logo.png')] bg-contain md:bg-cover bg-center bg-no-repeat
-                relative
-            ">
-                {/* Barra lateral no desktop */}
-                <div className="hidden md:block absolute top-0 right-0 h-full w-[4px] bg-gradient-to-b from-[#D33865] via-[#38d3a6] to-[#D33865] animate-borderMove" />
+            {/* ===== IMAGEM DE FUNDO ===== */}
+            <div className="hidden md:flex flex-[1.3] min-h-full bg-[url('/logo.jpg')] bg-cover bg-center bg-no-repeat relative">
+                <div className="absolute top-0 right-0 h-full w-[4px] bg-gradient-to-b from-[#D33865] via-[#38d3a6] to-[#D33865] animate-borderMove" />
             </div>
 
             {loginSelecionado && (
@@ -64,9 +59,13 @@ export default function TelaInicial() {
                         onMouseEnter={() => setHover(true)}
                         onMouseLeave={() => setHover(false)}
                         className={`relative flex items-center justify-center transition-all duration-500 rounded-full shadow-xl cursor-pointer overflow-hidden
-                        ${hover ? "w-80 h-80" : "w-28 h-28"}
-                        ${hover ? "bg-stone-900 dark:bg-[#FDFBD4]" : "bg-black dark:bg-[#eae9c3]"}
-                    `}>
+                            ${hover ? "w-80 h-80" : "w-28 h-28"}
+                            ${
+                                hover
+                                    ? "bg-stone-900 dark:bg-[#FDFBD4]"
+                                    : "bg-black dark:bg-[#eae9c3]"
+                            }`}
+                    >
                         {!hover && (
                             <span className="text-xl font-bold text-[#FDFBD4] dark:text-black transition-all duration-300">
                                 <MdFingerprint size={100} />
