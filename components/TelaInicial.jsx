@@ -12,9 +12,24 @@ export default function TelaInicial() {
         <div className="min-h-screen flex items-stretch justify-evenly bg-[#FDFBD4] dark:bg-black relative">
 
             {/* ===== IMAGEM DE FUNDO ===== */}
-            <div className="hidden md:flex flex-[1.3] min-h-full bg-[url('/logo.jpg')] bg-cover bg-center bg-no-repeat relative">
-                <div className="absolute top-0 right-0 h-full w-[4px] bg-gradient-to-b from-[#D33865] via-[#38d3a6] to-[#D33865] animate-borderMove" />
+            <div className="
+                flex           /* sempre aparece, até no celular */
+                md:flex-[1.3]  /* no desktop ocupa mais espaço */
+                flex-[0.4]     /* no celular ocupa menos */
+                min-h-full 
+                bg-[url('/logo.jpg')]
+                bg-cover 
+                bg-center 
+                bg-no-repeat 
+                relative
+            ">
+                <div className="absolute top-0 right-0 h-full w-[4px] 
+                    bg-gradient-to-b 
+                    from-[#D33865] via-[#38d3a6] to-[#D33865] 
+                    animate-borderMove" 
+                />
             </div>
+
 
             {loginSelecionado && (
                 <button
