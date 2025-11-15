@@ -32,18 +32,25 @@ export default function HeaderPaciente({ ativo, setAtivo, paciente }) {
 
         {/* ESQUERDA — Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-full overflow-hidden bg-white p-[2px]">
-            <Image src="/logopaciente.jpg" alt="Logo" width={44} height={44} />
-          </div>
-          <div>
-            <h1 className="text-lg font-semibold" style={{ color: "#2F4156" }}>
-              Clínica Mente Viva
-            </h1>
-            <p className="text-xs" style={{ color: "#2F4156" }}>
-              Cuidar da mente é viver em equilíbrio
-            </p>
-          </div>
+            <div className="w-16 h-16 rounded-full overflow-hidden bg-white p-[2px]">
+              <Image 
+                src="/logopaciente.jpg" 
+                alt="Logo" 
+                width={64} 
+                height={64} 
+                className="w-full h-full object-cover rounded-full"
+              />
+            </div>
+            <div>
+              <h1 className="text-lg font-semibold" style={{ color: "#2F4156" }}>
+                Clínica Mente Viva
+              </h1>
+              <p className="text-xs" style={{ color: "#2F4156" }}>
+                Cuidar da mente é viver em equilíbrio
+              </p>
+            </div>
         </div>
+
 
         {/* CENTRO — Botões */}
         <nav className="hidden md:flex items-center justify-center gap-4 flex-1">
