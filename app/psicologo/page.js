@@ -10,14 +10,12 @@ export default function Psicologo() {
   const [ativo, setAtivo] = useState("calendario");
 
   return (
-    <div className=""> 
+    <div className="min-h-screen bg-[#e7e9c4] text-[#FDFBD4] dark:text-[#f8f8f8] transition-colors duration-500">
+      {/* Header */}
       <Header ativo={ativo} setAtivo={setAtivo} />
       
-      <div 
-        className="min-h-screen bg-[#D36183]
-        text-[#FDFBD4] dark:text-[#f8f8f8]
-        flex items-center justify-center px-6 md:px-12 py-4 transition-colors duration-500"
-      >
+      {/* Conteúdo principal */}
+      <div className="min-h-[calc(100vh-80px)] flex items-start justify-center px-6 md:px-12 py-6 gap-6 w-full">
         {ativo === "calendario" && <CalendarioPsicologo />}
         {ativo === "pacientes" && <PacientesPsicologo />}
         {ativo === "disponibilidade" && <Disponibilidade />}

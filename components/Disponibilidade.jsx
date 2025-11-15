@@ -5,7 +5,6 @@ import { useIdioma } from "@/context/IdiomaContext";
 
 export default function Disponibilidade() {
     const { idioma } = useIdioma();
-
     const [salas, setSalas] = useState([]);
     const [disponibilidades, setDisponibilidades] = useState([]);
     const [buscando, setBuscando] = useState(false);
@@ -22,7 +21,6 @@ export default function Disponibilidade() {
     useEffect(() => {
         const psicologo = JSON.parse(localStorage.getItem("psicologo"));
         if (psicologo) setIdPsicologo(psicologo.id);
-
         fetchAll();
     }, []);
 
@@ -30,10 +28,8 @@ export default function Disponibilidade() {
         setBuscando(true);
         try {
             const [resSalas, resDisp] = await Promise.all([getSalas(), getDisponibilidades()]);
-            const salasData = resSalas.data?.salas ?? resSalas.data ?? [];
-            const dispData = resDisp.data?.disponibilidades ?? resDisp.data ?? [];
-            setSalas(salasData);
-            setDisponibilidades(dispData);
+            setSalas(resSalas.data?.salas ?? resSalas.data ?? []);
+            setDisponibilidades(resDisp.data?.disponibilidades ?? resDisp.data ?? []);
         } catch (err) {
             console.error(err);
             setMensagem(err.message || (idioma === "pt" ? "Erro ao buscar dados." : "Error fetching data."));
@@ -75,13 +71,7 @@ export default function Disponibilidade() {
         setCarregando(true);
         try {
             if (editingId) {
-                await updateDisponibilidade(editingId, {
-                    id_psicologo,
-                    id_sala,
-                    data,
-                    horario_inicial,
-                    horario_final,
-                });
+                await updateDisponibilidade(editingId, { id_psicologo, id_sala, data, horario_inicial, horario_final });
                 setMensagem(idioma === "pt" ? "Disponibilidade atualizada!" : "Availability updated!");
             } else {
                 await createDisponibilidade(id_psicologo, id_sala, data, horario_inicial, horario_final);
@@ -119,25 +109,22 @@ export default function Disponibilidade() {
     }
 
     return (
-        <div className="w-full flex flex-col mx-auto py-8 px-4 gap-5">
-            <div className="bg-white dark:bg-black border-2 border-[#D33865] rounded-xl shadow-inner">
-                <div className="w-full p-4 border-b-1 border-[#D33865] mb-4">
-                    <h1 className="text-2xl font-bold text-[#D33865]">
-                        {idioma === "pt" ? "Definir disponibilidade" : "Set availability"}
-                    </h1>
-                </div>
+        <div className="w-full flex flex-col items-center gap-8 p-6">
+            {/* Formulário */}
+            <div className="w-full max-w-4xl p-6 flex flex-col gap-4 rounded-xl shadow-lg border  bg-white/10">
+                <h1 className="text-2xl font-bold text-[#2F4156]">
+                    {idioma === "pt" ? "Definir disponibilidade" : "Set availability"}
+                </h1>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-6 p-4">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <select
                         value={id_sala}
                         onChange={(e) => setIdSala(e.target.value)}
-                        className="w-full bg-[#FFE3EB] p-4 rounded-xl shadow-sm text-black"
+                        className="w-full p-4 rounded-lg  text-white bg-[#2F4156] shadow-sm"
                     >
                         <option value="">{idioma === "pt" ? "Selecione uma sala" : "Select a room"}</option>
                         {salas.map((s) => (
-                            <option key={s.id} value={s.id}>
-                                {s.nome}
-                            </option>
+                            <option key={s.id} value={s.id}>{s.nome}</option>
                         ))}
                     </select>
 
@@ -145,31 +132,31 @@ export default function Disponibilidade() {
                         type="date"
                         value={data}
                         onChange={(e) => setData(e.target.value)}
-                        className="w-full bg-[#FFE3EB] p-4 rounded-xl shadow-sm text-black"
+                        className="w-full p-4 rounded-lg  text-white bg-[#2F4156] shadow-sm"
                     />
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-4">
                         <input
                             type="time"
                             value={horario_inicial}
                             onChange={(e) => setHoraInicial(e.target.value)}
-                            className="w-full bg-[#FFE3EB] p-4 rounded-xl shadow-sm text-black"
+                            className="w-full p-4 rounded-lg  text-white bg-[#2F4156] shadow-sm"
                         />
                         <input
                             type="time"
                             value={horario_final}
                             onChange={(e) => setHoraFinal(e.target.value)}
-                            className="w-full bg-[#FFE3EB] p-4 rounded-xl shadow-sm text-black"
+                            className="w-full p-4 rounded-lg  text-white bg-[#2F4156] shadow-sm"
                         />
                     </div>
 
-                    {mensagem && <p className="text-sm text-center text-[#D33865]">{mensagem}</p>}
+                    {mensagem && <p className="text-center text-blue-700 font-medium">{mensagem}</p>}
 
-                    <div className="flex gap-3">
+                    <div className="flex gap-4">
                         <button
                             type="submit"
                             disabled={carregando}
-                            className="flex-1 bg-[#D33865] text-white dark:text-black py-3 rounded-full font-bold hover:opacity-90 disabled:opacity-60 cursor-pointer"
+                            className="flex-1 py-3 rounded-full bg-[#2F4156] text-white font-bold hover:bg-blue-800 disabled:opacity-60 transition-all"
                         >
                             {carregando
                                 ? idioma === "pt" ? "Salvando..." : "Saving..."
@@ -182,7 +169,7 @@ export default function Disponibilidade() {
                             <button
                                 type="button"
                                 onClick={resetForm}
-                                className="bg-white dark:bg-black text-[#D33865] py-3 px-4 rounded-full font-semibold hover:opacity-90 border cursor-pointer"
+                                className="py-3 px-4 rounded-full border border-blue-900 text-blue-900 hover:bg-blue-50 transition-all"
                             >
                                 {idioma === "pt" ? "Cancelar" : "Cancel"}
                             </button>
@@ -191,63 +178,52 @@ export default function Disponibilidade() {
                 </form>
             </div>
 
-            <div className="bg-white dark:bg-black border-2 border-[#D33865] rounded-xl shadow-inner">
-                <div className="w-full p-4 border-b-1 border-[#D33865]">
-                    <h1 className="text-2xl font-bold text-[#D33865]">
-                        {idioma === "pt" ? "Todas as disponibilidades" : "All availabilities"}
-                    </h1>
-                </div>
+            {/* Lista de Disponibilidades */}
+            <div className="w-full max-w-4xl p-6 flex flex-col gap-4 rounded-xl shadow-lg border  bg-white/10">
+                <h1 className="text-2xl font-bold text-[#2F4156]">
+                    {idioma === "pt" ? "Todas as disponibilidades" : "All availabilities"}
+                </h1>
 
                 {buscando ? (
-                    <p>{idioma === "pt" ? "Carregando..." : "Loading..."}</p>
+                    <p className="text-[#2F4156]">{idioma === "pt" ? "Carregando..." : "Loading..."}</p>
                 ) : disponibilidades.length === 0 ? (
-                    <p>{idioma === "pt" ? "Nenhuma disponibilidade." : "No availabilities."}</p>
+                    <p className="text-[#2F4156]">{idioma === "pt" ? "Nenhuma disponibilidade." : "No availabilities."}</p>
                 ) : (
-                    <ul className="flex flex-col gap-3 p-4">
+                    <ul className="flex flex-col gap-4">
                         {disponibilidades.map((d) => {
                             const [ano, mes, dia] = d.data.split("-").map(Number);
                             const dataLocal = new Date(ano, mes - 1, dia);
-
                             const dataFormatada = dataLocal.toLocaleDateString("pt-BR", {
                                 weekday: "long",
                                 day: "2-digit",
                                 month: "2-digit",
-                                year: "numeric",
+                                year: "numeric"
                             });
 
                             return (
-                                <li
-                                    key={d.id}
-                                    className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 bg-[#fff9d9] dark:bg-[#121212] rounded-xl border border-[#D33865]/30 shadow-sm hover:shadow-md transition-all"
-                                >
+                                <li key={d.id} className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-lg bg-white/20 border border-blue-400 shadow-md">
                                     <div className="flex flex-col">
-                                        <span className="text-[#D33865] font-semibold text-lg">
-                                            {d.nome_sala
-                                                ? `${d.nome_sala} — ${d.nome_psicologo}`
-                                                : `${salaNomeById(d.id_sala)} — ${d.nome_psicologo}`}
+                                        <span className="text-blue-900 font-semibold text-lg">
+                                            {d.nome_sala ? `${d.nome_sala} — ${d.nome_psicologo}` : `${salaNomeById(d.id_sala)} — ${d.nome_psicologo}`}
                                         </span>
-                                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                                        <span className="text-gray-800 text-sm capitalize">
                                             {dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1)}
                                         </span>
-
-                                        <div className="mt-1 flex items-center gap-2 text-sm font-medium">
-                                            <span className="bg-[#D33865]/20 text-[#D33865] dark:bg-[#f9c9d9]/20 px-2 py-[2px] rounded-full">
-                                                {d.horario_inicial} → {d.horario_final}
-                                            </span>
-                                        </div>
+                                        <span className="mt-1 inline-block px-2 py-1 rounded-full text-sm font-medium text-white bg-blue-900">
+                                            {d.horario_inicial} → {d.horario_final}
+                                        </span>
                                     </div>
 
-                                    <div className="flex gap-2 justify-end">
+                                    <div className="flex gap-2 mt-2 md:mt-0">
                                         <button
                                             onClick={() => startEdit(d)}
-                                            className="px-3 py-2 rounded-md bg-[#f9d7df] hover:bg-[#f2c7cf] text-[#D33865] font-semibold cursor-pointer transition-all"
+                                            className="px-3 py-2 rounded-md bg-blue-900 hover:bg-blue-800 text-white font-semibold transition-all"
                                         >
                                             {idioma === "pt" ? "Editar" : "Edit"}
                                         </button>
-
                                         <button
                                             onClick={() => handleDelete(d.id)}
-                                            className="px-3 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white font-semibold cursor-pointer transition-all"
+                                            className="px-3 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white font-semibold transition-all"
                                         >
                                             {idioma === "pt" ? "Excluir" : "Delete"}
                                         </button>

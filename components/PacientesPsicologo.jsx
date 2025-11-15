@@ -95,10 +95,10 @@ export default function PacientesPsicologo() {
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center text-center mt-12 text-gray-700 dark:text-gray-300">
-                    <p className="text-lg font-semibold">
+                    <p className="text-2xl font-bold text-[#2F4156]">
                         Nenhum paciente encontrado
                     </p>
-                    <p className="text-sm opacity-80 mt-1">
+                    <p className="text-2xl font-bold text-[#2F4156]">
                         Assim que um paciente for cadastrado, ele aparecerá aqui.
                     </p>
                 </div>
