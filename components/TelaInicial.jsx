@@ -10,7 +10,7 @@ export default function TelaInicial() {
 
     return (
         <div className="min-h-screen flex items-stretch justify-evenly bg-[#FDFBD4] dark:bg-black relative">
-            <div className="hidden md:flex flex-[1.3] min-h-full bg-[url(@/public/logo.png)] bg-cover bg-center bg-no-repeat relative">
+            <div className="hidden md:flex flex-[1.3] min-h-full bg-[url('/logo.png')] bg-cover bg-center bg-no-repeat relative">
                 <div className="absolute top-0 right-0 h-full w-[4px] bg-gradient-to-b from-[#D33865] via-[#38d3a6] to-[#D33865] animate-borderMove" />
             </div>
 
